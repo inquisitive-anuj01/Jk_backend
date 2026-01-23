@@ -109,11 +109,12 @@ export const getBooking = async (req, res) => {
 export const updateBookingStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status, paymentStatus } = req.body;
+        const { status, paymentStatus, paymentIntentId } = req.body;
 
         const updateData = {};
         if (status) updateData.status = status;
         if (paymentStatus) updateData.paymentStatus = paymentStatus;
+        if (paymentIntentId) updateData.paymentIntentId = paymentIntentId;
 
         const booking = await Booking.findByIdAndUpdate(id, updateData, {
             new: true,
@@ -144,15 +145,16 @@ export const updateBookingStatus = async (req, res) => {
 
 /**
  * Get all bookings (for admin dashboard)
- * Supports filtering by status and pagination
+ * Supports filtering by status, paymentStatus, serviceType and pagination
  */
 export const getAllBookings = async (req, res) => {
     try {
-        const { page = 1, limit = 10, status, paymentStatus } = req.query;
+        const { page = 1, limit = 10, status, paymentStatus, serviceType } = req.query;
 
         const query = {};
         if (status) query.status = status;
         if (paymentStatus) query.paymentStatus = paymentStatus;
+        if (serviceType) query.serviceType = serviceType;
 
         const bookings = await Booking.find(query)
             .sort({ createdAt: -1 })
@@ -190,3 +192,34 @@ export const getAllBookings = async (req, res) => {
         });
     }
 };
+
+/**
+ * Delete booking (admin only)
+ */
+export const deleteBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const booking = await Booking.findByIdAndDelete(id);
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Booking deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error deleting booking:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to delete booking",
+            error: error.message,
+        });
+    }
+};
+

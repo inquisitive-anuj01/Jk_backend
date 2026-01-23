@@ -15,7 +15,7 @@ const bookingSchema = new mongoose.Schema(
             lng: { type: Number },
         },
         dropoff: {
-            address: { type: String, required: true },
+            address: { type: String }, // Optional for hourly bookings
             lat: { type: Number },
             lng: { type: Number },
         },
@@ -31,6 +31,7 @@ const bookingSchema = new mongoose.Schema(
         journeyInfo: {
             distanceMiles: { type: Number },
             durationMinutes: { type: Number },
+            hours: { type: Number }, // For hourly bookings
         },
 
         // Vehicle Details

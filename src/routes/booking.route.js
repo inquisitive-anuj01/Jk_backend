@@ -4,6 +4,7 @@ import {
     getBooking,
     updateBookingStatus,
     getAllBookings,
+    deleteBooking,
 } from "../controllers/bookingController.js";
 
 const router = express.Router();
@@ -20,4 +21,8 @@ router.get("/:id", getBooking);
 // Update booking status (admin or payment webhook)
 router.patch("/:id/status", updateBookingStatus);
 
+// Delete booking (admin only)
+router.delete("/:id", deleteBooking);
+
 export default router;
+

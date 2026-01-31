@@ -22,15 +22,6 @@ const router = express.Router();
 // Search Available Vehicles With Fare calculation in same !
 // going forward with this to calculate fare 
 router.post('/search', getAvailableVehiclesWithFare);
-
-// Get available vehicles (if frontend already calculated distance)
-// not going forware with this !
-// router.get('/available', getAvailableVehicles);
-
-
-// Get pricing for a vehicle
-// router.get('/:id/pricing', getVehiclePricing);
-
 // ADMIN ROUTES
 // TODO: Add isAuthenticated and isAdmin middleware
 
@@ -55,10 +46,6 @@ router.patch('/:id/availability', updateVehicleAvailability);
 // Toggle vehicle active status 
 router.patch('/:id/toggle-status', toggleVehicleStatus);
 
-// Set P2P pricing for a vehicle (Admin)
-router.put('/:id/pricing/p2p', setP2PPricing);
 
-// Set Hourly pricing for a vehicle (Admin)
-router.put('/:id/pricing/hourly', setHourlyPricing);
 
 export default router;

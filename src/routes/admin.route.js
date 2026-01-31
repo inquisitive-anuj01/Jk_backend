@@ -11,6 +11,8 @@ const router = express.Router();
 
 // Public routes
 router.post("/create", createAdmin); // For Postman use only
+
+// Admin login
 router.post("/login", loginAdmin);
 
 // Protected routes (require valid JWT token)

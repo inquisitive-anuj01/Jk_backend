@@ -1,8 +1,15 @@
 import { Booking } from "../models/booking.model.js";
+import {
+    sendWelcomeEmail,
+    sendLeadNotificationToAdmin,
+    sendBookingConfirmation,
+    sendNewBookingToAdmin,
+} from "../utils/emailService.js";
 
 /**
- * Create a new booking (called AFTER payment is complete)
- * This saves all booking data including payment info to the database
+ * Create a new booking (called when user clicks Proceed on Step 3)
+ * This saves the booking as a lead and sends welcome/notification emails
+ * Emails are sent asynchronously so the response is fast
  */
 export const createBooking = async (req, res) => {
     try {
@@ -33,6 +40,8 @@ export const createBooking = async (req, res) => {
             paymentIntentId,
             // User (if logged in)
             userId,
+            // Flag to skip emails (for updates)
+            skipEmails,
         } = req.body;
 
         // Create booking with all details
@@ -58,13 +67,33 @@ export const createBooking = async (req, res) => {
             userId,
         });
 
+        // Send emails only for new leads (not updates) and when emails are not skipped
+        if (!skipEmails && paymentStatus !== "paid") {
+            // Prepare booking data for emails
+            const emailBookingData = {
+                ...booking.toObject(),
+                pickup: pickup,
+                dropoff: dropoff,
+            };
+
+            // Send welcome email to user (async, don't wait)
+            sendWelcomeEmail(emailBookingData).catch((err) => {
+                console.error("Background email error (welcome):", err);
+            });
+
+            // Send lead notification to admin (async, don't wait)
+            sendLeadNotificationToAdmin(emailBookingData).catch((err) => {
+                console.error("Background email error (admin lead):", err);
+            });
+        }
+
         res.status(201).json({
             success: true,
             message: "Booking created successfully",
             data: booking,
         });
     } catch (error) {
-        console.error("Error creating booking:", error);
+        console.error("Error creating booking:", error.message);
         res.status(500).json({
             success: false,
             message: "Failed to create booking",
@@ -105,6 +134,7 @@ export const getBooking = async (req, res) => {
 
 /**
  * Update booking status (for admin or after payment update)
+ * Sends confirmation emails when payment status changes to 'paid'
  */
 export const updateBookingStatus = async (req, res) => {
     try {
@@ -115,6 +145,11 @@ export const updateBookingStatus = async (req, res) => {
         if (status) updateData.status = status;
         if (paymentStatus) updateData.paymentStatus = paymentStatus;
         if (paymentIntentId) updateData.paymentIntentId = paymentIntentId;
+
+        // If payment is now paid, also set status to confirmed
+        if (paymentStatus === "paid" && !status) {
+            updateData.status = "confirmed";
+        }
 
         const booking = await Booking.findByIdAndUpdate(id, updateData, {
             new: true,
@@ -128,6 +163,22 @@ export const updateBookingStatus = async (req, res) => {
             });
         }
 
+        // Send confirmation emails when payment is successful
+        if (paymentStatus === "paid") {
+            // Prepare booking data for emails
+            const emailBookingData = booking.toObject();
+
+            // Send booking confirmation to user (async, don't wait)
+            sendBookingConfirmation(emailBookingData).catch((err) => {
+                console.error("Background email error (confirmation):", err);
+            });
+
+            // Send new booking alert to admin (async, don't wait)
+            sendNewBookingToAdmin(emailBookingData, { paymentIntentId }).catch((err) => {
+                console.error("Background email error (admin booking):", err);
+            });
+        }
+
         res.status(200).json({
             success: true,
             message: "Booking updated successfully",
@@ -138,6 +189,76 @@ export const updateBookingStatus = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Failed to update booking",
+            error: error.message,
+        });
+    }
+};
+
+/**
+ * Update booking details (when user edits from summary)
+ * Sends welcome email only if email address changed
+ */
+export const updateBookingDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            passengerDetails,
+            flightDetails,
+            specialInstructions,
+            isBookingForSomeoneElse,
+            guestDetails,
+            isAirportPickup,
+            originalEmail, // The original email to compare against
+        } = req.body;
+
+        // Get the existing booking to check email change
+        const existingBooking = await Booking.findById(id);
+        if (!existingBooking) {
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found",
+            });
+        }
+
+        // Check if email has changed
+        const newEmail = passengerDetails?.email;
+        const emailChanged = originalEmail && newEmail && originalEmail !== newEmail;
+
+        // Build update data
+        const updateData = {
+            passengerDetails,
+            isBookingForSomeoneElse,
+            guestDetails: isBookingForSomeoneElse ? guestDetails : null,
+            isAirportPickup,
+            flightDetails: isAirportPickup ? flightDetails : null,
+            specialInstructions,
+        };
+
+        const booking = await Booking.findByIdAndUpdate(id, updateData, {
+            new: true,
+            runValidators: true,
+        });
+
+        // Send welcome email only to the NEW email if email changed
+        if (emailChanged) {
+            const emailBookingData = booking.toObject();
+            sendWelcomeEmail(emailBookingData).catch((err) => {
+                console.error("Background email error (email change welcome):", err);
+            });
+            console.log(`Email changed from ${originalEmail} to ${newEmail} - sending welcome email to new address`);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Booking details updated successfully",
+            data: booking,
+            emailSent: emailChanged,
+        });
+    } catch (error) {
+        console.error("Error updating booking details:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to update booking details",
             error: error.message,
         });
     }

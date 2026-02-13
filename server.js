@@ -17,6 +17,10 @@ import airportPricingRoutes from "./src/routes/airportPricing.route.js";
 import bookingRoutes from "./src/routes/booking.route.js";
 import paymentRoutes from "./src/routes/payment.route.js";
 import adminRoutes from "./src/routes/admin.route.js";
+import serviceRoutes from "./src/routes/service.route.js";
+import fleetRoutes from "./src/routes/fleet.route.js";
+import eventRoutes from "./src/routes/event.route.js";
+import blogRoutes from "./src/routes/blog.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -46,6 +50,10 @@ app.use("/api/airport-pricing", airportPricingRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/fleet", fleetRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/blogs", blogRoutes);
 
 // Dummy route to check if the server is running
 app.get("/", (req, res) => {
@@ -68,4 +76,4 @@ connectDB()
   });
 
 
-  export default app;
+export default app;

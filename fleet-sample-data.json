@@ -1,0 +1,250 @@
+[
+    {
+        "title": "Mercedes E Class Chauffeur London",
+        "subtitle": "Executive Sedan",
+        "description": "One of the indispensable additions to our fleet of luxury cars. Mercedes E class provides World-class chauffeur service for business and leisure travel.",
+        "longDescription": "One of the indispensable additions to our fleet of luxury cars is the Mercedes E Class chauffeur car. The series of full-sized luxury flagship vehicles, Mercedes E Class provides the World-class chauffeur service for business and leisure travel. JK Executive Chauffeurs have the latest models and new shape Mercedes E Class vehicle. With enhanced technologies and dynamic appearance, Mercedes E Class chauffeur car is designed to make your life easier and luxurious.\n\nWith the sporty look, sleek design, stylish entrance and the new technology, Mercedes E class is designed for your safety, comfort, and luxury. The large cabin is equipped with the Bluetooth Audio streaming for your entertainment. The 24*7 wifi connection enables you to use every minute to its fullest. The traction system present in the car enhances the car handling on wet or icy roads by transmitting the engine's torque to the wheels.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+        "specifications": [
+            "Comfortable leather seats",
+            "Rear climate control",
+            "Speed-compensated volume control",
+            "Rear fog lamps",
+            "Ample leg room space",
+            "Electronic assistance",
+            "Electronic traction system",
+            "Air conditioning",
+            "Bluetooth Audio streaming",
+            "Multiple safety systems"
+        ],
+        "features": [
+            "First class chauffeur",
+            "Free 60 mins airport waiting",
+            "Free 15 mins waiting for other journeys",
+            "Includes meet & greet",
+            "Free cancellation within 24 hours",
+            "Complimentary water"
+        ],
+        "passengers": 3,
+        "luggage": 2,
+        "isActive": true,
+        "priority": 1
+    },
+    {
+        "title": "Mercedes S Class Chauffeur London",
+        "subtitle": "First Class Luxury",
+        "description": "The pinnacle of luxury chauffeuring. The Mercedes S Class offers unparalleled comfort, cutting-edge technology, and sophisticated elegance for executive travel.",
+        "longDescription": "The Mercedes S Class is the pinnacle of luxury chauffeuring, offering an unparalleled experience for business executives and VIPs. Known as the CEO's choice, this flagship sedan combines cutting-edge technology with supreme comfort. The rear cabin offers individual reclining seats, ambient lighting, and a whisper-quiet ride that lets you arrive refreshed and composed.\n\nEquipped with the latest MBUX infotainment system, rear entertainment screens, and panoramic sunroof, every journey becomes a first-class experience. The S Class features advanced driver assistance systems, air suspension for the smoothest ride imaginable, and a climate system that maintains the perfect temperature.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800",
+        "specifications": [
+            "Individual rear reclining seats",
+            "Rear entertainment system",
+            "Executive rear seat package",
+            "Panoramic sunroof",
+            "Ambient lighting with 64 colours",
+            "MBUX infotainment system",
+            "Air suspension",
+            "Heated and ventilated seats",
+            "Noise-insulated cabin",
+            "Fragrance system"
+        ],
+        "features": [
+            "First class chauffeur",
+            "Free 60 mins airport waiting",
+            "Free 15 mins waiting for other journeys",
+            "Includes meet & greet",
+            "Free cancellation within 24 hours",
+            "Complimentary refreshments"
+        ],
+        "passengers": 3,
+        "luggage": 2,
+        "isActive": true,
+        "priority": 2
+    },
+    {
+        "title": "Mercedes V Class Chauffeur London",
+        "subtitle": "Luxury People Carrier",
+        "description": "The ultimate luxury people carrier for group travel. Mercedes V Class offers spacious comfort for up to 7 passengers with premium amenities throughout.",
+        "longDescription": "The Mercedes V Class is the ultimate luxury people carrier, perfect for group transfers, family trips, and corporate team travel. With seating for up to 7 passengers, this versatile vehicle doesn't compromise on luxury. The cabin features premium leather seats, individual climate zones, and ample luggage space for everyone.\n\nWhether you're heading to the airport with your family, organizing a corporate group transfer, or planning a day out with friends, the V Class delivers comfort and style for every passenger. The sliding doors make entry and exit effortless, while the panoramic windows flood the cabin with natural light.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1570294646112-27ce4f174e47?w=800",
+        "specifications": [
+            "Seating for up to 7 passengers",
+            "Individual climate zones",
+            "Premium leather upholstery",
+            "Sliding doors for easy access",
+            "Panoramic windows",
+            "USB charging ports for all seats",
+            "Ample luggage compartment",
+            "Ambient lighting",
+            "Rear entertainment system",
+            "Privacy glass"
+        ],
+        "features": [
+            "Professional chauffeur",
+            "Free 60 mins airport waiting",
+            "Free 15 mins waiting for other journeys",
+            "Includes meet & greet",
+            "Free cancellation within 24 hours",
+            "Ideal for groups"
+        ],
+        "passengers": 7,
+        "luggage": 7,
+        "isActive": true,
+        "priority": 3
+    },
+    {
+        "title": "Mercedes Benz EQE Chauffeur London",
+        "subtitle": "Electric Executive",
+        "description": "The future of luxury chauffeuring. The all-electric Mercedes EQE combines sustainable travel with exceptional comfort and cutting-edge technology.",
+        "longDescription": "Step into the future of luxury chauffeuring with the all-electric Mercedes EQE. This groundbreaking electric sedan delivers zero-emission travel without compromising on the comfort and sophistication you expect from a premium chauffeur service. The EQE offers a whisper-quiet ride, instant torque for smooth acceleration, and a range that handles any journey across London and beyond.\n\nThe interior is a showcase of modern design with the optional Hyperscreen spanning the entire dashboard. Sustainable materials blend with luxury finishes, while the advanced air filtration system ensures the purest air quality inside the cabin.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1625231334168-35bf60d42f13?w=800",
+        "specifications": [
+            "All-electric powertrain",
+            "Zero emissions",
+            "MBUX Hyperscreen option",
+            "Advanced air filtration",
+            "Sustainable interior materials",
+            "Rapid charging capability",
+            "360-degree camera system",
+            "Augmented reality navigation",
+            "Heated seats front and rear",
+            "Over-the-air updates"
+        ],
+        "features": [
+            "First class chauffeur",
+            "Zero emission travel",
+            "Free 60 mins airport waiting",
+            "Free 15 mins waiting for other journeys",
+            "Includes meet & greet",
+            "Eco-friendly luxury"
+        ],
+        "passengers": 3,
+        "luggage": 2,
+        "isActive": true,
+        "priority": 4
+    },
+    {
+        "title": "Rolls Royce Chauffeur London",
+        "subtitle": "Ultimate Prestige",
+        "description": "The epitome of prestige and opulence. Our Rolls Royce chauffeur service delivers the ultimate in luxury travel for the most discerning clients.",
+        "longDescription": "For those who demand nothing but the absolute best, our Rolls Royce chauffeur service is the epitome of prestige and opulence. The hand-crafted interior, starlight headliner, and whisper-quiet Spirit of Ecstasy guide you through London in unmatched style. Every detail has been meticulously designed to provide the most luxurious travel experience possible.\n\nThe rear cabin is a sanctuary of calm with massage seats, individual champagne coolers, and a bespoke audio system. Whether it's a red carpet event, a wedding, or an important business meeting, arriving in a Rolls Royce makes a statement that words cannot describe.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1631295868223-63265b40d9e4?w=800",
+        "specifications": [
+            "Hand-crafted leather interior",
+            "Starlight headliner",
+            "Rear massage seats",
+            "Champagne cooler",
+            "Bespoke audio system",
+            "Suicide coach doors",
+            "Panoramic glass roof",
+            "Night vision system",
+            "Rear theatre screens",
+            "Bespoke clock"
+        ],
+        "features": [
+            "Elite chauffeur service",
+            "Red carpet arrival",
+            "Free 60 mins airport waiting",
+            "Includes meet & greet",
+            "Complimentary champagne",
+            "White glove service"
+        ],
+        "passengers": 3,
+        "luggage": 2,
+        "isActive": true,
+        "priority": 5
+    },
+    {
+        "title": "Range Rover Chauffeur London",
+        "subtitle": "Luxury SUV",
+        "description": "Command the road in refined luxury. Our Range Rover chauffeur service offers powerful presence, elevated comfort, and versatility for any occasion.",
+        "longDescription": "Our Range Rover chauffeur service combines commanding road presence with refined British luxury. Whether navigating city streets or country roads, the Range Rover delivers supreme comfort and versatility. The elevated seating position gives passengers a commanding view of their surroundings, while the air suspension adapts to every road surface.\n\nThe cabin is a haven of luxury with semi-aniline leather, four-zone climate control, and the Meridian surround sound system. With generous legroom and luggage space, the Range Rover is ideal for airport transfers, corporate travel, and special occasions where you want to make an impression.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=800",
+        "specifications": [
+            "Semi-aniline leather seats",
+            "Four-zone climate control",
+            "Meridian surround sound",
+            "Panoramic glass roof",
+            "Adaptive air suspension",
+            "Terrain Response system",
+            "Head-up display",
+            "Heated steering wheel",
+            "Cooled centre console",
+            "Gesture control sunblind"
+        ],
+        "features": [
+            "Professional chauffeur",
+            "Free 60 mins airport waiting",
+            "Free 15 mins waiting for other journeys",
+            "Includes meet & greet",
+            "Free cancellation within 24 hours",
+            "Premium SUV experience"
+        ],
+        "passengers": 4,
+        "luggage": 4,
+        "isActive": true,
+        "priority": 6
+    },
+    {
+        "title": "Mini Coach Hire London",
+        "subtitle": "Group Transport",
+        "description": "Comfortable group transport for up to 16 passengers. Our mini coaches are perfect for corporate events, group transfers, and special occasions.",
+        "longDescription": "Our luxury mini coach service provides comfortable and stylish group transport for up to 16 passengers. Perfect for corporate events, conference delegates, wedding parties, and group airport transfers. Each mini coach features reclining seats, air conditioning, and ample luggage space.\n\nOur professional drivers ensure your group arrives together, on time, and in comfort. With onboard amenities including USB charging, PA system, and entertainment, even the journey becomes part of the experience.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800",
+        "specifications": [
+            "Up to 16 passenger seating",
+            "Reclining seats",
+            "Air conditioning throughout",
+            "Large luggage compartment",
+            "USB charging points",
+            "PA system",
+            "Entertainment system",
+            "Tinted windows",
+            "Reading lights",
+            "Overhead storage"
+        ],
+        "features": [
+            "Professional driver",
+            "Free 60 mins airport waiting",
+            "Corporate group packages",
+            "Event transportation",
+            "Free cancellation within 24 hours",
+            "Door-to-door service"
+        ],
+        "passengers": 16,
+        "luggage": 16,
+        "isActive": true,
+        "priority": 7
+    },
+    {
+        "title": "Coach Hire For Every Occasion",
+        "subtitle": "Large Group Transport",
+        "description": "Full-size luxury coach hire for events, conferences, and large group travel. Seating up to 49 passengers in comfort and style.",
+        "longDescription": "For larger groups and events, our full-size luxury coaches provide premium transport for up to 49 passengers. Whether you're organising a corporate conference, a sporting event, a wedding with a large guest list, or a group tour, our coaches deliver comfort, punctuality, and professionalism.\n\nEach coach features plush reclining seats, individual air conditioning controls, onboard restroom, and entertainment systems. Our experienced drivers handle all the logistics, allowing you to focus on your event. We also offer bespoke packages for multi-day tours and recurring corporate shuttle services.",
+        "heroImageUrl": "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=800",
+        "specifications": [
+            "Up to 49 passenger seating",
+            "Plush reclining seats",
+            "Individual air conditioning",
+            "Onboard restroom",
+            "Entertainment system",
+            "PA system with microphone",
+            "Large luggage hold",
+            "WiFi connectivity",
+            "USB and power outlets",
+            "Overhead reading lights"
+        ],
+        "features": [
+            "Professional driver",
+            "Corporate packages available",
+            "Multi-day tour options",
+            "Event transportation",
+            "Free cancellation within 48 hours",
+            "Bespoke itineraries"
+        ],
+        "passengers": 49,
+        "luggage": 49,
+        "isActive": true,
+        "priority": 8
+    }
+]

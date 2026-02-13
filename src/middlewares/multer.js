@@ -14,8 +14,14 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder = "general";
 
-    if (file.fieldname === "image" || file.fieldname === "images") {
-      folder = "vehicles";
+    // Check the route to determine the upload folder
+    const isServiceRoute = req.originalUrl && req.originalUrl.includes("/api/services");
+    const isFleetRoute = req.originalUrl && req.originalUrl.includes("/api/fleet");
+
+    if (file.fieldname === "heroImage" || file.fieldname === "gallery") {
+      folder = "fleet";
+    } else if (file.fieldname === "image" || file.fieldname === "images") {
+      folder = isServiceRoute ? "services" : "vehicles";
     } else if (file.fieldname === "icon") {
       folder = "icons";
     }

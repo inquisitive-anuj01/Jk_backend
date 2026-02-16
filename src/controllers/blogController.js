@@ -8,7 +8,7 @@ export const createBlog = async (req, res) => {
             heroImageUrl, heroImageAlt,
             author, category, tags,
             seoTitle, seoDescription,
-            isActive, priority,
+            isActive, priority, publishDate,
         } = req.body;
 
         const blogData = {
@@ -24,6 +24,8 @@ export const createBlog = async (req, res) => {
             isActive: isActive !== undefined ? isActive : true,
             priority: priority || 0,
         };
+
+        if (publishDate) blogData.publishDate = new Date(publishDate);
 
         if (slug) blogData.slug = slug;
 
@@ -86,7 +88,7 @@ export const getAllBlogs = async (req, res) => {
 
         const [blogs, total] = await Promise.all([
             Blog.find(filter)
-                .sort({ priority: 1, createdAt: -1 })
+                .sort({ priority: 1, publishDate: -1 })
                 .skip(skip)
                 .limit(limit)
                 .select("-sections -__v"), // Don't send sections in listing

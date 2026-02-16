@@ -87,6 +87,10 @@ const blogSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
+        // Original publish date from WordPress (for sorting)
+        publishDate: {
+            type: Date,
+        },
     },
     {
         timestamps: true,
@@ -116,7 +120,7 @@ blogSchema.pre("save", async function () {
 
 // Indexes
 blogSchema.index({ slug: 1 });
-blogSchema.index({ isActive: 1, priority: 1, createdAt: -1 });
+blogSchema.index({ isActive: 1, priority: 1, publishDate: -1 });
 blogSchema.index({ category: 1 });
 
 const Blog = mongoose.model("Blog", blogSchema);

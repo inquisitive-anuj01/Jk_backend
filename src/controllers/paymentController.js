@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-// Test mode origins - payments from these origins will use test keys
+//  payments from these origins will use test keys
 const TEST_MODE_ORIGINS = [
     "http://localhost",
     "http://127.0.0.1",
@@ -30,10 +30,8 @@ const getStripe = (isTestMode) => {
     return new Stripe(secretKey);
 };
 
-/**
- * Create a PaymentIntent for the booking
- * This is called when user clicks "Proceed to Payment"
- */
+// Create a PaymentIntent for the booking
+
 export const createPaymentIntent = async (req, res) => {
     try {
         const { amount, currency = "gbp", bookingData, origin } = req.body;
@@ -174,7 +172,7 @@ export const createPaymentIntent = async (req, res) => {
 
         // Payment Intent options
         const paymentIntentOptions = {
-            amount: Math.round(amount * 100), // Stripe expects amount in smallest currency unit (pence)
+            amount: Math.round(amount * 100), // Stripe expects amount in smallest currency unit 
             currency,
             automatic_payment_methods: {
                 enabled: true,

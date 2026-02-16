@@ -270,9 +270,7 @@ export const deleteService = async (req, res) => {
     }
 };
 
-// @desc    Get nav menu structure (services grouped by category + airports)
-// @route   GET /api/services/nav-menu
-// @access  Public
+
 export const getNavMenu = async (req, res) => {
     try {
         // Fetch active services sorted by priority

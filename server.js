@@ -21,6 +21,7 @@ import serviceRoutes from "./src/routes/service.route.js";
 import fleetRoutes from "./src/routes/fleet.route.js";
 import eventRoutes from "./src/routes/event.route.js";
 import blogRoutes from "./src/routes/blog.route.js";
+import contactRoutes from "./src/routes/contact.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -54,6 +55,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/fleet", fleetRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Dummy route to check if the server is running
 app.get("/", (req, res) => {

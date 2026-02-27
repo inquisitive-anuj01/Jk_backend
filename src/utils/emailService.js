@@ -937,9 +937,550 @@ export const sendNewBookingToAdmin = async (bookingData, paymentDetails = {}) =>
 };
 
 // Export all functions
+/**
+ * Send Contact Form Inquiry to Admin
+ * Triggered when a user submits the Contact Us form
+ */
+export const sendContactInquiryToAdmin = async ({ name, email, phone, subject, message }) => {
+    const transporter = createTransporter();
+    const adminEmail = process.env.EMAIL_USER || process.env.ADMIN_EMAIL;
+
+    const subjectLabels = {
+        booking: "Booking Enquiry",
+        corporate: "Corporate Service",
+        airport: "Airport Transfer",
+        wedding: "Wedding Service",
+        quote: "Get a Quote",
+        other: "Other",
+    };
+
+    const subjectLabel = subjectLabels[subject] || subject || "General Enquiry";
+    const submittedAt = new Date().toLocaleString("en-GB", {
+        dateStyle: "full",
+        timeStyle: "short",
+    });
+
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Contact Inquiry — JK Executive</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                background-color: #0f0f0f;
+                color: #333;
+                padding: 20px 0;
+            }
+            .wrapper {
+                max-width: 620px;
+                margin: 0 auto;
+                background: #ffffff;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            }
+            /* ── Header ── */
+            .header {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 36px 30px 28px;
+                text-align: center;
+                border-bottom: 3px solid #D7B75E;
+            }
+            .header-badge {
+                display: inline-block;
+                background: rgba(215,183,94,0.15);
+                border: 1px solid rgba(215,183,94,0.4);
+                color: #D7B75E;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                padding: 5px 16px;
+                border-radius: 20px;
+                margin-bottom: 14px;
+            }
+            .header h1 {
+                color: #ffffff;
+                font-size: 26px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                margin-bottom: 6px;
+            }
+            .header h1 span { color: #D7B75E; }
+            .header .sub {
+                color: rgba(255,255,255,0.5);
+                font-size: 13px;
+                letter-spacing: 1px;
+            }
+            /* ── Alert Banner ── */
+            .alert-banner {
+                background: linear-gradient(135deg, #D7B75E 0%, #c9a84c 100%);
+                padding: 14px 30px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .alert-banner span {
+                color: #1a1a1a;
+                font-size: 13px;
+                font-weight: 600;
+            }
+            /* ── Content ── */
+            .content { padding: 32px 30px; background: #fafafa; }
+            /* ── Card ── */
+            .card {
+                background: #ffffff;
+                border-radius: 12px;
+                border: 1px solid #e8e8e8;
+                overflow: hidden;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            }
+            .card-header {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 12px 20px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .card-header .icon { font-size: 16px; }
+            .card-header .title {
+                color: #D7B75E;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .card-body { padding: 20px; }
+            /* ── Rows ── */
+            .field-row {
+                display: flex;
+                padding: 10px 0;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 14px;
+            }
+            .field-row:last-child { border-bottom: none; }
+            .field-label {
+                min-width: 110px;
+                color: #888;
+                font-weight: 600;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                padding-top: 2px;
+            }
+            .field-value {
+                color: #1a1a1a;
+                font-weight: 500;
+                flex: 1;
+                line-height: 1.5;
+            }
+            .field-value a { color: #D7B75E; text-decoration: none; }
+            /* ── Subject Badge ── */
+            .subject-chip {
+                display: inline-block;
+                background: rgba(215,183,94,0.12);
+                border: 1px solid rgba(215,183,94,0.35);
+                color: #b8933a;
+                padding: 3px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            /* ── Message box ── */
+            .message-box {
+                background: #f8f8f8;
+                border-left: 4px solid #D7B75E;
+                border-radius: 0 8px 8px 0;
+                padding: 16px 18px;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.7;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            /* ── Timestamp ── */
+            .timestamp {
+                text-align: center;
+                padding: 14px 20px;
+                background: #fff;
+                border-top: 1px solid #f0f0f0;
+                border-radius: 0 0 12px 12px;
+            }
+            .timestamp span {
+                font-size: 12px;
+                color: #aaa;
+                letter-spacing: 0.5px;
+            }
+            .timestamp strong { color: #777; }
+            /* ── Footer ── */
+            .footer {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 24px 30px;
+                text-align: center;
+            }
+            .footer-logo {
+                color: #D7B75E;
+                font-size: 18px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                margin-bottom: 6px;
+            }
+            .footer-text {
+                color: rgba(255,255,255,0.35);
+                font-size: 12px;
+                line-height: 1.6;
+            }
+            .footer-contact {
+                margin-top: 12px;
+                font-size: 12px;
+                color: rgba(255,255,255,0.5);
+            }
+            .footer-contact a { color: #D7B75E; text-decoration: none; }
+            .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+
+            <!-- Header -->
+            <div class="header">
+                <div class="header-badge">New Inquiry</div>
+                <h1>JK <span>Executive</span></h1>
+                <p class="sub">Premium Chauffeur Services · Contact Form Submission</p>
+            </div>
+
+            <!-- Alert Banner -->
+            <div class="alert-banner">
+                <span> &nbsp;A new inquiry has been submitted via the Contact Us page.</span>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+
+                <!-- Contact Details Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">Contact Details</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-row">
+                            <span class="field-label">Full Name</span>
+                            <span class="field-value">${name || "—"}</span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Email</span>
+                            <span class="field-value">
+                                <a href="mailto:${email}">${email || "—"}</a>
+                            </span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Phone</span>
+                            <span class="field-value">
+                                <a href="tel:${phone}">${phone || "—"}</a>
+                            </span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Subject</span>
+                            <span class="field-value">
+                                <span class="subject-chip">${subjectLabel}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">Message</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="message-box">${message || "—"}</div>
+                    </div>
+                    <div class="timestamp">
+                        <span>Received on <strong>${submittedAt}</strong></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-logo">JK EXECUTIVE</div>
+                <div class="divider"></div>
+                <p class="footer-text">This is an automated notification from the JK Executive contact form.</p>
+                <div class="footer-contact">
+                    <a href="tel:+442034759906">+44 203 475 9906</a> &nbsp;·&nbsp;
+                    <a href="mailto:info@jkexecutivechauffeurs.com">info@jkexecutivechauffeurs.com</a>
+                </div>
+            </div>
+
+        </div>
+    </body>
+    </html>
+    `;
+
+    const mailOptions = {
+        from: `"JK Executive — Contact Form" <${process.env.EMAIL_USER}>`,
+        to: adminEmail,
+        replyTo: email,
+        subject: `New Inquiry: ${subjectLabel} — ${name}`,
+        html: htmlContent,
+    };
+
+    try {
+        const result = await transporter.sendMail(mailOptions);
+        console.log(`Contact inquiry email sent to admin: ${adminEmail}`);
+        return { success: true, messageId: result.messageId };
+    } catch (error) {
+        console.error("Failed to send contact inquiry email:", error);
+        return { success: false, error: error.message };
+    }
+};
+
+/**
+ * Send Bulk / Corporate Quote Request to Admin
+ * Triggered when someone submits the sticky ContactForm
+ */
+export const sendBulkQuoteRequestToAdmin = async ({ name, email, enquiry }) => {
+    const transporter = createTransporter();
+    const adminEmail = process.env.EMAIL_USER || process.env.ADMIN_EMAIL;
+
+    const submittedAt = new Date().toLocaleString("en-GB", {
+        dateStyle: "full",
+        timeStyle: "short",
+    });
+
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Bulk Quote Request — JK Executive</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                background-color: #0f0f0f;
+                color: #333;
+                padding: 20px 0;
+            }
+            .wrapper {
+                max-width: 620px;
+                margin: 0 auto;
+                background: #ffffff;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            }
+            .header {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 36px 30px 28px;
+                text-align: center;
+                border-bottom: 3px solid #D7B75E;
+            }
+            .header-badge {
+                display: inline-block;
+                background: rgba(215,183,94,0.15);
+                border: 1px solid rgba(215,183,94,0.4);
+                color: #D7B75E;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                padding: 5px 16px;
+                border-radius: 20px;
+                margin-bottom: 14px;
+            }
+            .header h1 {
+                color: #ffffff;
+                font-size: 26px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                margin-bottom: 6px;
+            }
+            .header h1 span { color: #D7B75E; }
+            .header .sub {
+                color: rgba(255,255,255,0.5);
+                font-size: 13px;
+                letter-spacing: 1px;
+            }
+            .alert-banner {
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                padding: 14px 30px;
+            }
+            .alert-banner span {
+                color: #1a1a1a;
+                font-size: 13px;
+                font-weight: 600;
+            }
+            .content { padding: 32px 30px; background: #fafafa; }
+            .card {
+                background: #ffffff;
+                border-radius: 12px;
+                border: 1px solid #e8e8e8;
+                overflow: hidden;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            }
+            .card-header {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 12px 20px;
+            }
+            .card-header .title {
+                color: #D7B75E;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+            .card-body { padding: 20px; }
+            .field-row {
+                display: flex;
+                padding: 10px 0;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 14px;
+            }
+            .field-row:last-child { border-bottom: none; }
+            .field-label {
+                min-width: 90px;
+                color: #888;
+                font-weight: 600;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                padding-top: 2px;
+            }
+            .field-value {
+                color: #1a1a1a;
+                font-weight: 500;
+                flex: 1;
+                line-height: 1.5;
+            }
+            .field-value a { color: #D7B75E; text-decoration: none; }
+            .enquiry-box {
+                background: #f8f8f8;
+                border-left: 4px solid #f59e0b;
+                border-radius: 0 8px 8px 0;
+                padding: 16px 18px;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.7;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            .timestamp {
+                text-align: center;
+                padding: 14px 20px;
+                background: #fff;
+                border-top: 1px solid #f0f0f0;
+            }
+            .timestamp span { font-size: 12px; color: #aaa; }
+            .timestamp strong { color: #777; }
+            .footer {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+                padding: 24px 30px;
+                text-align: center;
+            }
+            .footer-logo {
+                color: #D7B75E;
+                font-size: 18px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                margin-bottom: 6px;
+            }
+            .footer-text { color: rgba(255,255,255,0.35); font-size: 12px; line-height: 1.6; }
+            .footer-contact { margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.5); }
+            .footer-contact a { color: #D7B75E; text-decoration: none; }
+            .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="header">
+                <div class="header-badge">Bulk / Corporate</div>
+                <h1>JK <span>Executive</span></h1>
+                <p class="sub">Premium Chauffeur Services · Quote Request</p>
+            </div>
+
+            <div class="alert-banner">
+                <span>New Bulk Booking Quote Request received — action required.</span>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">Customer Details</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-row">
+                            <span class="field-label">Full Name</span>
+                            <span class="field-value">${name || "—"}</span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Email</span>
+                            <span class="field-value">
+                                <a href="mailto:${email}">${email || "—"}</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">Enquiry / Requirements</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="enquiry-box">${enquiry || "—"}</div>
+                    </div>
+                    <div class="timestamp">
+                        <span>Received on <strong>${submittedAt}</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="footer-logo">JK EXECUTIVE</div>
+                <div class="divider"></div>
+                <p class="footer-text">Automated notification — Bulk &amp; Corporate Booking form.</p>
+                <div class="footer-contact">
+                    <a href="tel:+442034759906">+44 203 475 9906</a> &nbsp;·&nbsp;
+                    <a href="mailto:info@jkexecutivechauffeurs.com">info@jkexecutivechauffeurs.com</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+
+    const mailOptions = {
+        from: `"JK Executive — Quote Request" <${process.env.EMAIL_USER}>`,
+        to: adminEmail,
+        replyTo: email,
+        subject: `New Bulk Booking Quote Request — ${name}`,
+        html: htmlContent,
+    };
+
+    try {
+        const result = await transporter.sendMail(mailOptions);
+        console.log(`Bulk quote email sent to admin: ${adminEmail}`);
+        return { success: true, messageId: result.messageId };
+    } catch (error) {
+        console.error("Failed to send bulk quote email:", error);
+        return { success: false, error: error.message };
+    }
+};
+
 export default {
     sendWelcomeEmail,
     sendLeadNotificationToAdmin,
     sendBookingConfirmation,
     sendNewBookingToAdmin,
+    sendContactInquiryToAdmin,
+    sendBulkQuoteRequestToAdmin,
 };

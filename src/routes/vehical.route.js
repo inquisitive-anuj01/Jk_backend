@@ -14,38 +14,35 @@ import {
   setHourlyPricing,
 } from '../controllers/pricingController.js';
 import { upload } from '../middlewares/multer.js';
+import { protectAdmin } from '../middlewares/adminAuth.js';
 
 const router = express.Router();
 
-// PUBLIC ROUTES 
-
-// Search Available Vehicles With Fare calculation in same !
-// going forward with this to calculate fare 
+// ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
+// Search available vehicles with fare calculation (used by customers)
 router.post('/search', getAvailableVehiclesWithFare);
-// ADMIN ROUTES
-// TODO: Add isAuthenticated and isAdmin middleware
+
+// ─── ADMIN ROUTES (require valid admin JWT) ───────────────────────────────────
 
 // Get all vehicles (admin dashboard)
-router.get('/', getAllVehicles);
+router.get('/', protectAdmin, getAllVehicles);
 
 // Get single vehicle by ID
-router.get('/:id', getVehicleById);
+router.get('/:id', protectAdmin, getVehicleById);
 
-// Create new vehicle 
-router.post('/', upload.single('image'), createVehicle);
+// Create new vehicle
+router.post('/', protectAdmin, upload.single('image'), createVehicle);
 
-// Update vehicle 
-router.put('/:id', upload.single('image'), updateVehicle);
+// Update vehicle
+router.put('/:id', protectAdmin, upload.single('image'), updateVehicle);
 
 // Delete vehicle
-router.delete('/:id', deleteVehicle);
+router.delete('/:id', protectAdmin, deleteVehicle);
 
 // Update vehicle availability
-router.patch('/:id/availability', updateVehicleAvailability);
+router.patch('/:id/availability', protectAdmin, updateVehicleAvailability);
 
-// Toggle vehicle active status 
-router.patch('/:id/toggle-status', toggleVehicleStatus);
-
-
+// Toggle vehicle active status
+router.patch('/:id/toggle-status', protectAdmin, toggleVehicleStatus);
 
 export default router;

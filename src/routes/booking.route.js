@@ -7,27 +7,30 @@ import {
     getAllBookings,
     deleteBooking,
 } from "../controllers/bookingController.js";
+import { protectAdmin } from "../middlewares/adminAuth.js";
 
 const router = express.Router();
 
-// Create new booking (on Step 3 proceed - lead capture)
+// ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
+
+// Create new booking (customer submits booking form — Step 3)
 router.post("/", createBooking);
 
+// ─── ADMIN ROUTES (require valid admin JWT) ───────────────────────────────────
+
 // Get all bookings (admin dashboard)
-router.get("/", getAllBookings);
+router.get("/", protectAdmin, getAllBookings);
 
 // Get booking by ID
-router.get("/:id", getBooking);
+router.get("/:id", protectAdmin, getBooking);
 
-// Update booking status (admin or payment webhook)
-router.patch("/:id/status", updateBookingStatus);
+// Update booking status (admin action)
+router.patch("/:id/status", protectAdmin, updateBookingStatus);
 
-// Update booking details (when user edits from summary)
-router.put("/:id/details", updateBookingDetails);
+// Update booking details (admin edits)
+router.put("/:id/details", protectAdmin, updateBookingDetails);
 
 // Delete booking (admin only)
-router.delete("/:id", deleteBooking);
+router.delete("/:id", protectAdmin, deleteBooking);
 
 export default router;
-
-

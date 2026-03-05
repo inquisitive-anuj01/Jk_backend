@@ -7,10 +7,11 @@ import {
     deleteFleet,
 } from "../controllers/fleetController.js";
 import { upload } from "../middlewares/multer.js";
+import { protectAdmin } from "../middlewares/adminAuth.js";
 
 const router = express.Router();
 
-// PUBLIC ROUTES
+// ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
 
 // Get all fleet entries (paginated)
 router.get("/", getAllFleet);
@@ -18,14 +19,15 @@ router.get("/", getAllFleet);
 // Get single fleet entry by slug
 router.get("/:slug", getFleetBySlug);
 
-// ADMIN / SEO ROUTES
+// ─── ADMIN ROUTES (require valid admin JWT) ───────────────────────────────────
 
-// Create new fleet entry (raw JSON with heroImageUrl)
-router.post("/", createFleet);
+// Create new fleet entry
+router.post("/", protectAdmin, createFleet);
 
 // Update fleet entry (supports file upload)
 router.put(
     "/:id",
+    protectAdmin,
     upload.fields([
         { name: "heroImage", maxCount: 1 },
         { name: "gallery", maxCount: 10 },
@@ -34,6 +36,6 @@ router.put(
 );
 
 // Delete fleet entry
-router.delete("/:id", deleteFleet);
+router.delete("/:id", protectAdmin, deleteFleet);
 
 export default router;

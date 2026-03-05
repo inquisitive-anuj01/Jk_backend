@@ -6,24 +6,25 @@ import {
     getAllPricing,
     deletePricing,
 } from "../controllers/pricingController.js";
+import { protectAdmin } from "../middlewares/adminAuth.js";
 
 const router = express.Router();
 
-// ADMIN ROUTES 
-// TODO: Add isAuthenticated and isAdmin middleware
-// Get all pricing configurations 
-router.get("/", getAllPricing);
+// ─── ALL ADMIN ROUTES (pricing is purely internal) ───────────────────────────
 
-// Get pricing for a specific vehicle 
-router.get("/vehicle/:vehicleId", getVehiclePricing);
+// Get all pricing configurations
+router.get("/", protectAdmin, getAllPricing);
+
+// Get pricing for a specific vehicle
+router.get("/vehicle/:vehicleId", protectAdmin, getVehiclePricing);
 
 // Set P2P pricing for a vehicle
-router.put("/vehicle/:vehicleId/p2p", setP2PPricing);
+router.put("/vehicle/:vehicleId/p2p", protectAdmin, setP2PPricing);
 
 // Set Hourly pricing for a vehicle
-router.put("/vehicle/:vehicleId/hourly", setHourlyPricing);
+router.put("/vehicle/:vehicleId/hourly", protectAdmin, setHourlyPricing);
 
 // Delete pricing configuration
-router.delete("/:id", deletePricing);
+router.delete("/:id", protectAdmin, deletePricing);
 
 export default router;

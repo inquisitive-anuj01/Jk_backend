@@ -8,10 +8,11 @@ import {
     getNavMenu,
 } from "../controllers/serviceController.js";
 import { upload } from "../middlewares/multer.js";
+import { protectAdmin } from "../middlewares/adminAuth.js";
 
 const router = express.Router();
 
-// PUBLIC ROUTES
+// ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
 
 // Get nav menu structure (must be before /:slug)
 router.get("/nav-menu", getNavMenu);
@@ -22,16 +23,15 @@ router.get("/", getAllServices);
 // Get single service by slug
 router.get("/:slug", getServiceBySlug);
 
-// ADMIN ROUTES
-// TODO: Add isAuthenticated and isAdmin middleware
+// ─── ADMIN ROUTES (require valid admin JWT) ───────────────────────────────────
 
 // Create new service
-router.post("/", upload.single("image"), createService);
+router.post("/", protectAdmin, upload.single("image"), createService);
 
 // Update service
-router.put("/:id", upload.single("image"), updateService);
+router.put("/:id", protectAdmin, upload.single("image"), updateService);
 
 // Delete service
-router.delete("/:id", deleteService);
+router.delete("/:id", protectAdmin, deleteService);
 
 export default router;

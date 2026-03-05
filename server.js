@@ -4,6 +4,7 @@ dotenv.config(); // Load env vars FIRST before other imports
 import express from "express";
 import cors from "cors";
 import { errorMiddleware } from "./src/middlewares/error.js";
+import { apiRateLimiter } from "./src/middlewares/rateLimiter.js";
 import connectDB from "./src/db/database.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -40,6 +41,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// rate limiter 
+app.use(apiRateLimiter);
 
 // Serve static files from uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

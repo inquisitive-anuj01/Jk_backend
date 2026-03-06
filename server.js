@@ -1,5 +1,10 @@
 import dotenv from "dotenv";
-dotenv.config(); // Load env vars FIRST before other imports
+dotenv.config(); 
+
+console.log("Environment Variables Loaded:");
+console.log("MONGO_URI exists:", process.env.MONGO_URI ? "YES" : "NO");
+console.log("PORT from env:", process.env.PORT);
+console.log("Current Directory (cwd):", process.cwd());
 
 import express from "express";
 import cors from "cors";
@@ -25,7 +30,7 @@ import blogRoutes from "./src/routes/blog.route.js";
 import contactRoutes from "./src/routes/contact.route.js";
 import faqRoutes from "./src/routes/faq.route.js";
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +38,7 @@ const __dirname = path.dirname(__filename);
 
 // Middleware setup
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173", "https://jk-frontend-nine.vercel.app"],
+  origin: ["http://localhost:5173", "http://localhost:5000", "http://127.0.0.1:5173", "https://jk-frontend-nine.vercel.app", "http://lavender-salmon-796541.hostingersite.com", "https://lavender-salmon-796541.hostingersite.com"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -47,6 +52,7 @@ app.use(apiRateLimiter);
 
 // Serve static files from uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 
 // Routes setup
 app.use("/api/vehicles", vehicleRoutes);
@@ -63,10 +69,19 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/faqs", faqRoutes);
 
-// Dummy route to check if the server is running
-app.get("/", (req, res) => {
-  res.send("Hi, Welcome to the server!");
+
+// React Frontend Static Files
+app.use(express.static(path.join(__dirname, "dist")));
+
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
+
+// Dummy route to check if the server is running
+// app.get("/", (req, res) => {
+//   res.send("Hi, Welcome to the server!");
+// });
 
 // Error handling middleware
 app.use(errorMiddleware);

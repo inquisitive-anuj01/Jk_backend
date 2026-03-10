@@ -52,6 +52,18 @@ const eventSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        // Category for grouping (e.g., "Sports", "Corporate", "Entertainment")
+        category: {
+            type: String,
+            trim: true,
+            enum: ["Sports", "Corporate", "Entertainment", "Exhibition", "General"],
+            default: "General",
+        },
+        // Show in main navigation dropdown
+        showInNav: {
+            type: Boolean,
+            default: false,
+        },
         // Admin controls
         isActive: {
             type: Boolean,

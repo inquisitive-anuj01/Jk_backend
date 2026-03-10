@@ -6,7 +6,7 @@ export const createEvent = async (req, res) => {
         const {
             title, subtitle, slug, description, longDescription,
             heroImageUrl, features, seoTitle, seoDescription,
-            isActive, priority,
+            category, showInNav, isActive, priority,
         } = req.body;
 
         // Build event data
@@ -18,6 +18,8 @@ export const createEvent = async (req, res) => {
             heroImageUrl,
             seoTitle,
             seoDescription,
+            category: category || "General",
+            showInNav: showInNav || false,
             isActive: isActive !== undefined ? isActive : true,
             priority: priority || 0,
         };
@@ -182,6 +184,32 @@ export const deleteEvent = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error deleting event",
+            error: error.message,
+        });
+    }
+};
+
+// Get events for navigation dropdown (only those with showInNav: true)
+export const getNavEvents = async (req, res) => {
+    try {
+        const events = await Event.find({
+            isActive: true,
+            showInNav: true,
+        })
+            .select("title slug category")
+            .sort({ priority: 1, createdAt: -1 })
+            .limit(10);
+
+        res.status(200).json({
+            success: true,
+            count: events.length,
+            events,
+        });
+    } catch (error) {
+        console.error("Error fetching nav events:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching nav events",
             error: error.message,
         });
     }

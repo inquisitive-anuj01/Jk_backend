@@ -5,6 +5,7 @@ import {
     getEventBySlug,
     updateEvent,
     deleteEvent,
+    getNavEvents,
 } from "../controllers/eventController.js";
 import { upload } from "../middlewares/multer.js";
 import { protectAdmin } from "../middlewares/adminAuth.js";
@@ -12,6 +13,9 @@ import { protectAdmin } from "../middlewares/adminAuth.js";
 const router = express.Router();
 
 // ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
+
+// Get events for navigation dropdown
+router.get("/nav", getNavEvents);
 
 // Get all events
 router.get("/", getAllEvents);

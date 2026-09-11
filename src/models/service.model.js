@@ -10,13 +10,13 @@ const serviceSchema = new mongoose.Schema(
 
         subtitle: {
             type: String,
-            required: [true, "Service subtitle is required"],
             trim: true,
+            default: "",
         },
 
         category: {
             type: String,
-            enum: ["Business Travel", "Leisure Travel", "Airport Travel", "Chauffeur Service", "Wedding Service"],
+            enum: ["Business Travel", "Leisure Travel", "Airport Travel", "Chauffeur Service", "Wedding Service", "Areas"],
             required: [true, "Service category is required"],
             trim: true,
         },
@@ -31,8 +31,8 @@ const serviceSchema = new mongoose.Schema(
 
         description: {
             type: String,
-            required: [true, "Service description is required"],
             trim: true,
+            default: "",
         },
 
         longDescription: {
@@ -142,7 +142,6 @@ serviceSchema.pre("validate", function () {
 });
 
 // Indexes
-serviceSchema.index({ slug: 1 }, { unique: true });
 serviceSchema.index({ isActive: 1, priority: 1 });
 serviceSchema.index({ priority: 1 });
 

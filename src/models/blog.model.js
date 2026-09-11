@@ -145,7 +145,6 @@ blogSchema.pre("save", async function () {
 });
 
 // Indexes
-blogSchema.index({ slug: 1 });
 blogSchema.index({ isActive: 1, priority: 1, publishDate: -1 });
 blogSchema.index({ category: 1 });
 

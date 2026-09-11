@@ -188,7 +188,6 @@ fleetSchema.pre("validate", function () {
 });
 
 // Indexes
-fleetSchema.index({ slug: 1 }, { unique: true });
 fleetSchema.index({ isActive: 1, priority: 1 });
 fleetSchema.index({ vehicleId: 1 });
 

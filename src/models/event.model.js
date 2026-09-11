@@ -100,7 +100,6 @@ eventSchema.pre("save", async function () {
 });
 
 // Indexes
-eventSchema.index({ slug: 1 });
 eventSchema.index({ isActive: 1, priority: 1 });
 
 const Event = mongoose.model("Event", eventSchema);

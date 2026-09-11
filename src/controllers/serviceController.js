@@ -62,10 +62,10 @@ export const createService = async (req, res) => {
 
         const service = await Service.create({
             title,
-            subtitle,
+            subtitle: subtitle || "",
             category,
             slug: slug || undefined,
-            description,
+            description: description || "",
             longDescription: longDescription || "",
             image,
             features: parsedFeatures || [],
@@ -73,7 +73,7 @@ export const createService = async (req, res) => {
             faqs: parsedFaqs || [],
             script: script || "",
             isActive: isActive !== undefined ? isActive : true,
-            priority: priority || 0,
+            priority: priority ? parseInt(priority) : 0,
             meta_title: meta_title || "",
             meta_description: meta_description || "",
         });
@@ -235,7 +235,7 @@ export const getAllServices = async (req, res) => {
 // @access  Public
 export const getServiceBySlug = async (req, res) => {
     try {
-        const service = await Service.findOne({ slug: req.params.slug });
+        const service = await Service.findOne({ slug: req.params.slug, isActive: true });
 
         if (!service) {
             return res.status(404).json({
@@ -249,7 +249,7 @@ export const getServiceBySlug = async (req, res) => {
             service,
         });
     } catch (error) {
-        console.error("Error fetching service:", error);
+        console.error("Error fetching service by slug:", error);
         res.status(500).json({
             success: false,
             message: "Error fetching service",
@@ -258,7 +258,7 @@ export const getServiceBySlug = async (req, res) => {
     }
 };
 
-// @desc    Update a service
+// @desc    Update an existing service
 // @route   PUT /api/services/:id
 // @access  Admin
 export const updateService = async (req, res) => {
@@ -266,7 +266,6 @@ export const updateService = async (req, res) => {
         const service = await Service.findById(req.params.id);
 
         if (!service) {
-            if (req.file) deleteFile(req.file.path);
             return res.status(404).json({
                 success: false,
                 message: "Service not found",
@@ -277,10 +276,10 @@ export const updateService = async (req, res) => {
 
         // Update fields
         if (title) service.title = title;
-        if (subtitle) service.subtitle = subtitle;
+        if (subtitle !== undefined) service.subtitle = subtitle;
         if (category) service.category = category;
         if (slug) service.slug = slug;
-        if (description) service.description = description;
+        if (description !== undefined) service.description = description;
         if (longDescription !== undefined) service.longDescription = longDescription;
         if (isActive !== undefined) service.isActive = isActive;
         if (priority !== undefined) service.priority = priority;
@@ -425,7 +424,7 @@ export const getNavMenu = async (req, res) => {
             .sort({ name: 1 });
 
         // Define category display order
-        const categoryOrder = ["Business Travel", "Leisure Travel", "Airport Travel", "Chauffeur Service", "Wedding Service"];
+        const categoryOrder = ["Business Travel", "Leisure Travel", "Airport Travel", "Chauffeur Service", "Wedding Service", "Areas"];
 
         // Group services by category
         const grouped = {};
@@ -438,10 +437,28 @@ export const getNavMenu = async (req, res) => {
         });
 
         // Build menu structure
+        const MAX_AREAS_NAV_ITEMS = 5;
         const menu = categoryOrder.map((cat) => {
             const categoryServices = grouped[cat] || [];
 
-            // For categories with multiple services — show as sub-dropdown
+            // "Areas" category: cap at 5 and add a "View all" link if more exist
+            if (cat === "Areas" && categoryServices.length > 1) {
+                const visibleChildren = categoryServices.slice(0, MAX_AREAS_NAV_ITEMS);
+                if (categoryServices.length > MAX_AREAS_NAV_ITEMS) {
+                    visibleChildren.push({
+                        label: `View all ${categoryServices.length} areas →`,
+                        href: `/services?category=${encodeURIComponent(cat)}`,
+                        isViewAll: true,
+                    });
+                }
+                return {
+                    label: cat,
+                    href: `/services?category=${encodeURIComponent(cat)}`,
+                    children: visibleChildren,
+                };
+            }
+
+            // For all other categories with multiple services — show as sub-dropdown (no cap)
             if (categoryServices.length > 1) {
                 return {
                     label: cat,

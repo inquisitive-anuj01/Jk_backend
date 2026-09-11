@@ -107,7 +107,6 @@ const airportSchema = new mongoose.Schema(
 );
 
 // Index for faster lookups
-airportSchema.index({ placeId: 1 });
 airportSchema.index({ iataCode: 1 });
 airportSchema.index({ name: "text", address: "text" });
 

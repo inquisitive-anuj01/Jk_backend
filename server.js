@@ -11,6 +11,7 @@ import cors from "cors";
 import { errorMiddleware } from "./src/middlewares/error.js";
 import { apiRateLimiter } from "./src/middlewares/rateLimiter.js";
 import connectDB from "./src/db/database.js";
+import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
 import fs from "fs";
@@ -86,6 +87,55 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"), {
   maxAge: "1y" // Cache images for 1 year
 }));
 
+
+// ================================================================
+// HEALTH CHECK ENDPOINT
+// Used by UptimeRobot / monitoring tools to detect outages
+// Returns 200 if everything is OK, 503 if DB is down
+// ================================================================
+app.get("/health", async (req, res) => {
+  const dbState     = mongoose.connection.readyState;
+  //  0 = disconnected | 1 = connected | 2 = connecting | 3 = disconnecting
+  const dbStateMap  = { 0: "disconnected", 1: "connected", 2: "connecting", 3: "disconnecting" };
+  const dbStatus    = dbStateMap[dbState] || "unknown";
+  const dbHealthy   = dbState === 1;
+
+  // Ping the DB with a lightweight command to confirm it's truly alive
+  let dbPingMs = null;
+  let dbPingOk = false;
+  if (dbHealthy) {
+    try {
+      const t0 = Date.now();
+      await mongoose.connection.db.admin().ping();
+      dbPingMs = Date.now() - t0;
+      dbPingOk = true;
+    } catch {
+      dbPingOk = false;
+    }
+  }
+
+  const memMB = (process.memoryUsage().rss / 1024 / 1024).toFixed(1);
+
+  const payload = {
+    status:      dbPingOk ? "ok" : "degraded",
+    timestamp:   new Date().toISOString(),
+    uptime_sec:  Math.floor(process.uptime()),
+    environment: process.env.NODE_ENV || "development",
+    database: {
+      status:    dbStatus,
+      ping_ok:   dbPingOk,
+      ping_ms:   dbPingMs,
+      host:      mongoose.connection.host || null,
+      db_name:   mongoose.connection.name || null,
+    },
+    memory: {
+      rss_mb: parseFloat(memMB),
+    },
+  };
+
+  const httpStatus = dbPingOk ? 200 : 503;
+  return res.status(httpStatus).json(payload);
+});
 
 // Routes setup
 app.use("/api/vehicles", vehicleRoutes);
